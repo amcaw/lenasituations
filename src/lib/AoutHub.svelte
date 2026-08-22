@@ -345,6 +345,14 @@
 	.row:first-of-type {
 		margin-top: 8px;
 	}
+	/* Sous cette taille, le disque central ne peut plus contenir les trois
+	   lignes de détail sans que leurs coins débordent sur les anneaux, et les
+	   réduire encore les rendrait illisibles. */
+	@container (max-width: 152px) {
+		.row {
+			display: none;
+		}
+	}
 
 	.thumb,
 	.gone {

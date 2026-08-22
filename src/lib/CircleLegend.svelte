@@ -70,10 +70,4 @@
 		line-height: var(--leading-normal);
 		color: var(--text-muted);
 	}
-	@media (max-width: 560px) {
-		.legend {
-			position: static;
-			max-width: none;
-		}
-	}
 </style>
