@@ -201,7 +201,12 @@
 			<div class="wrap">
 				<CircleLegend gone={totals.gone} approx={totals.approx} missing={missingDays} />
 				{#if open}
-					<button class="backdrop" aria-label="Fermer la vidéo" onclick={() => (open = null)}></button>
+					<button
+						class="backdrop"
+						tabindex="-1"
+						aria-label="Fermer la vidéo"
+						onclick={() => (open = null)}
+					></button>
 				{/if}
 				<AoutCircle
 					videos={data.videos}
