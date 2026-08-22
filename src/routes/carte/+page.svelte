@@ -79,7 +79,7 @@
 
 	<footer>
 		<span class="brand">Léna Situations · dix ans de vlogs d'août</span>
-		<span class="src">{card.foot}</span>
+		<span class="src">{card.foot} · © Ambroise Carton 2026</span>
 		<span class="url">amcaw.github.io/lenasituations</span>
 	</footer>
 </div>

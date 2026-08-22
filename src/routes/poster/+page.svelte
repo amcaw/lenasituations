@@ -65,7 +65,7 @@
 
 	<footer>
 		<span>Chaque anneau une saison, chaque secteur un jour du mois.</span>
-		<span class="src">Données YouTube au 22 août 2026</span>
+		<span class="src">Données YouTube au 22 août 2026 · © Ambroise Carton 2026</span>
 	</footer>
 </div>
 
