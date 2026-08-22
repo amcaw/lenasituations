@@ -314,10 +314,13 @@
 		fill: var(--blade-hi);
 	}
 
+	/* Le bloc est un rectangle inscrit dans un disque : c'est sa diagonale qui
+	   doit tenir dans le diamètre, pas sa largeur. D'où la largeur réduite, qui
+	   dégage de la hauteur, et les éléments retirés quand le disque rétrécit. */
 	.content {
 		position: relative;
 		z-index: 3;
-		width: 76%;
+		width: 68%;
 		text-align: center;
 	}
 	.big {
@@ -344,14 +347,6 @@
 	}
 	.row:first-of-type {
 		margin-top: 8px;
-	}
-	/* Sous cette taille, le disque central ne peut plus contenir les trois
-	   lignes de détail sans que leurs coins débordent sur les anneaux, et les
-	   réduire encore les rendrait illisibles. */
-	@container (max-width: 152px) {
-		.row {
-			display: none;
-		}
 	}
 
 	.thumb,
@@ -447,5 +442,29 @@
 		background: var(--accent);
 		border-color: var(--accent);
 		color: var(--accent-contrast);
+	}
+	/* Les requêtes de conteneur n'ajoutent pas de spécificité : elles doivent
+	   venir après les règles de base pour les emporter. Le disque rétrécit avec
+	   la fenêtre, et ce qu'il ne peut plus contenir sans déborder sur les
+	   anneaux disparaît, plutôt que d'être réduit jusqu'à l'illisible. */
+	@container (max-width: 250px) {
+		.hint {
+			display: none;
+		}
+	}
+	@container (max-width: 190px) {
+		.thumb,
+		.gone {
+			display: none;
+		}
+		.title {
+			min-height: 0;
+		}
+	}
+	@container (max-width: 152px) {
+		.row,
+		.meta {
+			display: none;
+		}
 	}
 </style>
