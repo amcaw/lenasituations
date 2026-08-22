@@ -8,9 +8,7 @@
 		subs
 	}: { videos: Video[]; seasons: Season[]; subs: SubPoint[] } = $props();
 
-	/* Effet août sur les abonnés, reconstruit depuis les archives web de la page
-	   de la chaîne : gain entre le 1er août et le 3 septembre, comparé au gain
-	   mensuel médian du reste de l'année. */
+
 	const august = $derived.by(() => {
 		const pts = subs.map((p) => ({ d: new Date(p.date).getTime(), v: p.subs }));
 		const near = (t: number, maxDays: number) => {
@@ -105,42 +103,39 @@
 		{longest.year}. C'est l'évolution que l'épaisseur des anneaux rend visible d'un coup d'œil.
 	</li>
 	<li>
-		<b>Le pic d'audience, c'est {peakViews.year}</b>, avec {fmtViews(peakViews.viewsMean)} de vues par
-		vlog. Jamais rebattu depuis, alors que la chaîne a continué de gagner des abonnés : le rituel a
-		trouvé son public bien avant que la notoriété plafonne.
+		<b>Le pic d'audience, c'est l'année {peakViews.year}</b>, avec {fmtViews(peakViews.viewsMean)} de vues par
+		vlog. Un score jamais rebattu depuis, alors que la chaîne a continué de gagner des abonnés.
 	</li>
 	<li>
 		<b>Le public le plus engagé n'est pas le plus large.</b> Le taux de likes culmine en
 		{peakLikes.year} à {fmtPct(peakLikes.likeRate)}, un an après le pic de vues, puis redescend
-		saison après saison. La dilution classique, ici documentée sur dix ans d'un format identique.
+		saison après saison.
 	</li>
 	<li>
-		<b>L'audience s'érode au fil du mois.</b> Le premier épisode d'une saison fait en moyenne
+		<b>L'audience s'érode au fil du mois d'août.</b> Le premier épisode d'une saison fait en moyenne
 		{Math.round(arc.first * 100)} % des vues de sa saison, le dernier {Math.round(arc.last * 100)} %.
-		Près du double. La promesse du 1<sup>er</sup> août attire plus que sa tenue le 31.
+		Près du double.
 	</li>
 	<li>
-		<b>Un mois d'août vaut une année d'abonnés.</b> Reconstruit depuis les archives web de la chaîne,
+		<b>Un mois d'août vaut une année d'abonnés.</b> Les chiffres d'abonnés reconstitués depuis les archives de la chaîne sur la Wayback Machine montre le rôle central des vlogs d'août dans la fidélisation du public de Léna Situations :
 		le gain d'abonnés pendant la saison va de {fmtInt(Math.round(august.lo / 1000) * 1000)} à
 		{fmtInt(Math.round(august.hi / 1000) * 1000)} selon les années, soit
-		{august.minRatio.toFixed(0)} à {august.maxRatio.toFixed(0)} fois le rythme des autres mois. Le
-		rituel n'accompagne pas la croissance de la chaîne : il la fabrique.
+		{august.minRatio.toFixed(0)} à {august.maxRatio.toFixed(0)} fois le rythme des autres mois.
 	</li>
 	<li>
-		<b>Le défi n'est vraiment tenu qu'à partir de 2022.</b>
+		<b>Le défi d'un vlog par jour n'est vraiment tenu qu'à partir de 2022.</b>
 		{perfect.length} saisons sans aucun jour manqué ({perfect.map((m) => m.year).join(', ')}), contre
-		{worst.n} jours sautés pour la seule saison {worst.year}. La régularité est venue avec le métier.
+		{worst.n} jours sautés pour la seule saison {worst.year}.
 	</li>
 	<li>
-		<b>Le rendez-vous s'est verrouillé à 20h50.</b> 20h00 en 2017, 22h22 en 2020, puis une médiane
-		stable à quelques minutes près depuis 2021. Une heure de publication devenue une institution.
+		<b>La publication du rendez-vous s'est progressivement verrouillée à 20h50.</b> 20h00 en 2017, 22h22 en 2020, puis une médiane
+		stable à quelques minutes près depuis 2021.
 	</li>
 	<li>
 		<b>Le carton isolé a disparu.</b> En {spread.early.year}, un vlog explosait à
 		{fmtViews(spread.early.viewsMax)} de vues quand les autres tournaient autour de
 		{fmtViews(spread.early.viewsMedian)}. En {spread.late.year}, le meilleur jour fait
-		{fmtViews(spread.late.viewsMax)} et un jour ordinaire {fmtViews(spread.late.viewsMedian)} : tous
-		les jours se valent. On ne vient plus pour une vidéo, on vient pour le mois.
+		{fmtViews(spread.late.viewsMax)} et un jour ordinaire {fmtViews(spread.late.viewsMedian)}.
 	</li>
 	<li>
 		<b>Le premier épisode boucle le dernier.</b> En {seasons[0].year}, la saison s'ouvre sur
@@ -151,8 +146,7 @@
 		<b>Dix étés tiennent en {fmtHours(totalHours)}</b>, soit {(totalHours / 86400)
 			.toFixed(1)
 			.replace('.', ',')} jours de visionnage non-stop et {fmtViews(totalViews)} de vues. Le plus long
-		épisode de la décennie, {fmtDur(longestEp?.duration)}, est dans la dernière saison : le format n'a
-		pas ralenti en s'arrêtant.
+		épisode de la décennie, {fmtDur(longestEp?.duration)}, est dans la dernière saison. Preuve que, même après dix ans de vlogs, Léna Situations en donne toujours plus à ses fans.
 	</li>
 </ol>
 

@@ -176,13 +176,14 @@
 				d={c.d}
 				class="cell {c.state}"
 				class:on={hovered?.season === c.season && hovered?.episode === c.episode}
-				class:dim={isDim(c.season) || c.muted}
-				fill={c.fill}
+				class:dim={isDim(c.season)}
+				class:out={c.muted}
+				fill={c.muted ? 'var(--state-empty)' : c.fill}
 			/>
 		{/each}
 
 		{#each bonus as b (b.v.id)}
-			<path d={b.d} class="cell bonus" class:dim={isDim(b.v.season)}>
+			<path d={b.d} class="cell bonus" class:dim={isDim(b.v.season)} class:out={!inRange(b.v)}>
 				<title>{b.v.title}, publié en septembre</title>
 			</path>
 		{/each}
@@ -258,6 +259,9 @@
 	}
 	.cell.dim {
 		opacity: 0.12;
+	}
+	.cell.out {
+		opacity: 0.5;
 	}
 	.cell.none {
 		stroke-width: 0;

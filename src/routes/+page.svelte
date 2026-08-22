@@ -36,7 +36,7 @@
 	let viewHi = $state<number | null>(null);
 	const lo = $derived(viewLo ?? viewBounds.min);
 	const hi = $derived(viewHi ?? viewBounds.max);
-	const filtering = $derived(lo > viewBounds.min || hi < viewBounds.max);
+	const filtering = $derived(metricKey === 'views' && (lo > viewBounds.min || hi < viewBounds.max));
 	const inRange = $derived((v: Video) =>
 		!filtering ? true : v.views != null && v.views >= lo && v.views <= hi
 	);
@@ -143,7 +143,7 @@
 		</p>
 		<p class="lede">
 			Chaque anneau est une année, chaque secteur un jour du mois.
-			<strong>Cliquez une case pour regarder le vlog</strong> : le centre du cercle est l'objectif.
+			<strong>Cliquez une case pour regarder le vlog</strong>.
 		</p>
 	</header>
 
@@ -153,16 +153,18 @@
 				<p class="rx-titre">Colorer le cercle par</p>
 				<MetricSwitch bind:active={metricKey} />
 				<Legend {buckets} label={metric.label} />
-				<RangeSlider
-					min={viewBounds.min}
-					max={viewBounds.max}
-					step={viewBounds.step}
-					bind:lo={() => lo, (v) => (viewLo = v)}
-					bind:hi={() => hi, (v) => (viewHi = v)}
-					label="Filtrer par vues"
-					fmt={fmtViews}
-					count="{shown.length} / {totals.episodes} vlogs"
-				/>
+				{#if metricKey === 'views'}
+					<RangeSlider
+						min={viewBounds.min}
+						max={viewBounds.max}
+						step={viewBounds.step}
+						bind:lo={() => lo, (v) => (viewLo = v)}
+						bind:hi={() => hi, (v) => (viewHi = v)}
+						label="Filtrer par vues"
+						fmt={fmtViews}
+						count="{shown.length} / {totals.episodes} vlogs"
+					/>
+				{/if}
 				<label class="toggle">
 					<input type="checkbox" bind:checked={proportional} />
 					épaisseur des anneaux proportionnelle à la durée

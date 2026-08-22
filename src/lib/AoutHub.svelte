@@ -27,7 +27,7 @@
 	} = $props();
 
 	const BLADES = 6;
-	const DURATION = 900;
+	const DURATION = 1150;
 
 	/* Le diaphragme est dessiné en SVG et posé PAR-DESSUS l'image : six lames
 	   opaques qui pivotent et s'effacent vers le pourtour. On ne découpe rien,
@@ -38,8 +38,9 @@
 	let shown = $state<Video | null>(null);
 	let frame = 0;
 
-	const cubicInOut = (p: number) =>
-		p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+	/* Une courbe douce plutôt qu'une cubique : la cubique traverse le milieu si
+	   vite que l'hexagone d'ouverture, qui est tout l'intérêt, ne se voit pas. */
+	const cubicInOut = (p: number) => -(Math.cos(Math.PI * p) - 1) / 2;
 
 	function animate(to: number) {
 		cancelAnimationFrame(frame);
@@ -71,27 +72,27 @@
 
 	$effect(() => () => cancelAnimationFrame(frame));
 
-	/* Une lame : secteur de 70 degrés, rayon largement supérieur au disque pour
-	   que six lames le couvrent entièrement à l'ouverture zéro. */
-	const BLADE_PATH = (() => {
-		const r = 96;
-		const half = (36 * Math.PI) / 180;
-		const x1 = 50 + r * Math.cos(-half);
-		const y1 = 50 + r * Math.sin(-half);
-		const x2 = 50 + r * Math.cos(half);
-		const y2 = 50 + r * Math.sin(half);
-		return `M 50 50 L ${x1.toFixed(2)} ${y1.toFixed(2)} L ${x2.toFixed(2)} ${y2.toFixed(2)} Z`;
-	})();
+	/* Un vrai diaphragme n'écarte pas des secteurs : chaque lame porte un côté
+	   droit, et les six côtés dessinent un hexagone qui grandit en pivotant.
+	   Une lame est donc le quadrilatère entre son côté d'hexagone et l'extérieur
+	   du cadre, ses bords fuyants décalés de SKEW : deux lames voisines partagent
+	   exactement ce bord, d'où les coutures obliques caractéristiques. */
+	const SKEW = 34;
+	const OUT = 170;
+	const R_OPEN = 84;
 
 	const blades = $derived.by(() => {
-		/* Le trou laissé au centre a pour rayon la course des lames : il faut
-		   58 unités pour dégager un disque de rayon 50, pas davantage, sinon
-		   les lames quittent le cadre avant la fin de l'animation. */
-		const push = t * 58;
-		const spin = (1 - t) * 50;
+		const r = t * R_OPEN;
+		const spin = (1 - t) * 42;
+		const pt = (k: number, radius: number, extra = 0) => {
+			const a = (((k * 360) / BLADES + spin + extra) * Math.PI) / 180;
+			return `${(50 + radius * Math.cos(a)).toFixed(2)} ${(50 + radius * Math.sin(a)).toFixed(2)}`;
+		};
 		return Array.from({ length: BLADES }, (_, i) => ({
 			i,
-			transform: `rotate(${(i * 360) / BLADES + spin} 50 50) translate(${push.toFixed(2)} 0)`
+			d:
+				`M ${pt(i, r)} L ${pt(i + 1, r)} ` +
+				`L ${pt(i + 1, OUT, SKEW)} L ${pt(i, OUT, SKEW)} Z`
 		}));
 	});
 
@@ -144,7 +145,7 @@
 		{#if t < 0.999}
 			<svg class="iris" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
 				{#each blades as b (b.i)}
-					<path d={BLADE_PATH} transform={b.transform} class="blade" class:odd={b.i % 2 === 1} />
+					<path d={b.d} class="blade" class:odd={b.i % 2 === 1} />
 				{/each}
 			</svg>
 		{/if}
@@ -306,7 +307,8 @@
 	.blade {
 		fill: var(--blade-lo);
 		stroke: var(--blade-hi);
-		stroke-width: 0.8;
+		stroke-width: 0.5;
+		stroke-linejoin: round;
 	}
 	.blade.odd {
 		fill: var(--blade-hi);
