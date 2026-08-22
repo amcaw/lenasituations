@@ -164,8 +164,16 @@
 				<p class="title">{hoverVideo.title}</p>
 				<span class="hint">cliquer pour regarder</span>
 			{:else}
-				<strong class="val gone-val">vidéo indisponible</strong>
-				<p class="title">passée en privé ou supprimée par la chaîne</p>
+				<strong class="val gone-val">
+					{hoverVideo.status === 'restricted' ? 'soumise à connexion' : 'vidéo indisponible'}
+				</strong>
+				<p class="title">
+					{hoverVideo.status === 'restricted'
+						? 'toujours en ligne, regardable en étant connecté, mais ses compteurs restent privés'
+						: hoverVideo.status === 'private'
+							? 'passée en privé par la chaîne'
+							: 'supprimée par la chaîne'}
+				</p>
 			{/if}
 		</div>
 	{:else}

@@ -1,13 +1,17 @@
 <script lang="ts">
 	import StatesLegend from './StatesLegend.svelte';
 
-	let { gone, missing }: { gone: number; missing: number } = $props();
+	let {
+		gone,
+		restricted,
+		missing
+	}: { gone: number; restricted: number; missing: number } = $props();
 </script>
 
 <details class="legend">
 	<summary>légende</summary>
 	<div class="body">
-		<StatesLegend {gone} {missing} />
+		<StatesLegend {gone} {restricted} {missing} />
 		<p>
 			L'épaisseur des anneaux dit la durée moyenne des vlogs de la saison. Le trait orange qui
 			traverse les dix anneaux relie le premier épisode de 2017 au premier épisode de 2026.

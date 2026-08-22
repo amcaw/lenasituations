@@ -37,7 +37,8 @@
 		episodes: data.videos.length,
 		views: data.seasons.reduce((a, s) => a + s.viewsTotal, 0),
 		secs: data.seasons.reduce((a, s) => a + s.durationTotal, 0),
-		gone: data.seasons.reduce((a, s) => a + s.nUnavailable, 0)
+		restricted: data.videos.filter((v) => v.status === 'restricted').length,
+		gone: data.videos.filter((v) => v.status === 'private' || v.status === 'removed').length
 	});
 
 	/* Jours sans épisode : uniquement sur les saisons terminées, la saison en
@@ -166,7 +167,7 @@
 
 		<section class="viz">
 			<div class="wrap">
-				<CircleLegend gone={totals.gone} missing={missingDays} />
+				<CircleLegend gone={totals.gone} restricted={totals.restricted} missing={missingDays} />
 				{#if open}
 					<button class="backdrop" aria-label="Fermer la vidéo" onclick={() => (open = null)}></button>
 				{/if}
@@ -217,8 +218,9 @@
 					Source :
 					<a href="https://www.youtube.com/@LenaSituations" target="_blank" rel="noopener">
 						chaîne YouTube de Léna Situations
-					</a>, extraction du 22 août 2026. {totals.episodes} épisodes recensés, dont {totals.gone}
-					devenus privés, supprimés ou restreints.
+					</a>, extraction du 22 août 2026. {totals.episodes} épisodes recensés, dont
+					{totals.restricted} soumis à connexion (toujours en ligne, mais compteurs inaccessibles) et
+					{totals.gone} passés en privé ou supprimés.
 				</p>
 			</div>
 		</section>
