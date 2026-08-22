@@ -58,14 +58,14 @@
 		<div><strong class="tnum">{fmtHours(totals.secs)}</strong><span>de vlog</span></div>
 		<div>
 			<strong class="tnum">{fmtDur(Math.min(...durs))} à {fmtDur(Math.max(...durs))}</strong>
-			<span>par épisode</span>
+			<span>de moyenne par saison</span>
 		</div>
 		<div><strong class="tnum">20h50</strong><span>l'heure fixe</span></div>
 	</div>
 
 	<footer>
 		<span>Chaque anneau une saison, chaque secteur un jour du mois.</span>
-		<span class="src">Données YouTube au 22 août 2026 · © Ambroise Carton 2026</span>
+		<span class="src">Données YouTube au 22 août 2026 — © Ambroise Carton</span>
 	</footer>
 </div>
 
@@ -210,9 +210,15 @@
 	footer {
 		display: flex;
 		justify-content: space-between;
+		align-items: baseline;
+		gap: 3vmin;
 		width: 100%;
 		font-size: 1.7vmin;
+		line-height: 1.3;
 		color: var(--text-muted);
+	}
+	footer span {
+		min-width: 0;
 	}
 	footer .src {
 		color: rgba(246, 239, 233, 0.32);

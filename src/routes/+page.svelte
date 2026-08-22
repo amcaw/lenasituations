@@ -137,8 +137,9 @@
 			Dix saisons du rituel, épisode par épisode :
 			<b class="tnum">{totals.episodes} épisodes</b>,
 			<b class="tnum">{fmtViews(totals.views)} de vues cumulées</b>,
-			<b class="tnum">{fmtHours(totals.secs)} de vlog</b>, des épisodes passés de
-			<b class="tnum">{fmtDur(shortest.durationMean)} à {fmtDur(longest.durationMean)}</b>, publiés à
+			<b class="tnum">{fmtHours(totals.secs)} de vlog</b>, une moyenne passée de
+			<b class="tnum">{fmtDur(shortest.durationMean)} par épisode en {shortest.year}</b> à
+			<b class="tnum">{fmtDur(longest.durationMean)} en {longest.year}</b>, publiés à
 			<b class="tnum">20h50</b>.
 		</p>
 		<p class="lede">
