@@ -1,0 +1,205 @@
+/* Structure, typographie, rayons et motion repris du design system RTBF
+   (layout_rtbf_analysis/design-system-rtbf.md) ; la palette reste la palette
+   solaire du projet. Les rôles RTBF sont remappés sur ces couleurs. */
+
+:root {
+  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --wght-light: 345;
+  --wght-normal: 545;
+  --wght-semibold: 650;
+  --wght-bold: 750;
+  --wght-extrabold: 860;
+
+  --text-10: 0.625rem;
+  --text-12: 0.75rem;
+  --text-14: 0.875rem;
+  --text-16: 1rem;
+  --text-18: 1.125rem;
+  --text-21: 1.3125rem;
+  --text-24: 1.5rem;
+  --text-30: 1.875rem;
+  --text-36: 2.25rem;
+  --text-48: 3rem;
+  --leading-tight: 1.15;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-full: 999px;
+  --duration: 0.2s;
+  --easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+
+  /* palette solaire, mappée sur les rôles RTBF */
+  --surface-page: #120b18;
+  --surface-card: #1e1226;
+  --surface-sunken: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.1);
+
+  --text-primary: #f6efe9;
+  --text-secondary: rgba(246, 239, 233, 0.72);
+  --text-muted: rgba(246, 239, 233, 0.46);
+  --grid-line: rgba(255, 255, 255, 0.13);
+  --grid-line-strong: rgba(255, 255, 255, 0.26);
+
+  --accent: #ff6b4a;
+  --accent-2: #ffb03a;
+  --accent-contrast: #170e1d;
+  --accent-soft: rgba(255, 107, 74, 0.16);
+  --focus-ring: #ffb03a;
+
+  --live: #4fd6e8;
+  --live-soft: rgba(79, 214, 232, 0.16);
+
+  --sun-0: #3a1d3d;
+  --sun-1: #7c2f4a;
+  --sun-2: #c0453f;
+  --sun-3: #f2703f;
+  --sun-4: #ffa93d;
+  --sun-5: #ffe08a;
+
+  --state-empty: rgba(255, 255, 255, 0.05);
+  --state-gone: rgba(246, 239, 233, 0.34);
+
+  /* lames du diaphragme */
+  --blade-hi: #4c3a5c;
+  --blade-lo: #33253f;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --surface-page: #fdf7f2;
+    --surface-card: #ffffff;
+    --surface-sunken: rgba(43, 28, 35, 0.04);
+    --surface-hover: rgba(43, 28, 35, 0.07);
+
+    --text-primary: #2b1c23;
+    --text-secondary: #5c4750;
+    --text-muted: #8a7680;
+    --grid-line: rgba(43, 28, 35, 0.13);
+    --grid-line-strong: rgba(43, 28, 35, 0.26);
+
+    --accent: #e4472a;
+    --accent-2: #b45309;
+    --accent-contrast: #ffffff;
+    --accent-soft: rgba(228, 71, 42, 0.1);
+    --focus-ring: #e4472a;
+
+    --live: #0f9bb0;
+    --live-soft: rgba(15, 155, 176, 0.12);
+
+    --sun-0: #fdeadb;
+    --sun-1: #fcd0a3;
+    --sun-2: #f6a35f;
+    --sun-3: #ea6f3c;
+    --sun-4: #c93f31;
+    --sun-5: #7d2140;
+
+    --state-empty: rgba(43, 28, 35, 0.06);
+    --state-gone: rgba(43, 28, 35, 0.34);
+
+    --blade-hi: #dcccc0;
+    --blade-lo: #c0ac9f;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-16);
+  line-height: var(--leading-normal);
+  font-variation-settings: 'wght' var(--wght-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+svg text {
+  font-family: var(--font-sans);
+  font-variation-settings: 'wght' var(--wght-normal);
+}
+
+:focus-visible {
+  outline: 4px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Titre de bloc : capitales resserrées */
+.rx-titre {
+  display: block;
+  margin: 0 0 14px;
+  font-size: var(--text-14);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-variation-settings: 'wght' var(--wght-bold);
+  color: var(--text-primary);
+}
+
+
+/* Encadré éditorial */
+.rx-box {
+  background: var(--surface-card);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+}
+
+.rx-box p {
+  margin: 0;
+  font-size: var(--text-16);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.rx-box p + p {
+  margin-top: 10px;
+}
+
+/* Boutons : tout est pilule */
+.rx-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid var(--grid-line-strong);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  padding: 5px 16px;
+  font-size: var(--text-14);
+  line-height: 1.3;
+  font-variation-settings: 'wght' var(--wght-semibold);
+  cursor: pointer;
+  transition: background var(--duration) var(--easing), color var(--duration) var(--easing),
+    border-color var(--duration) var(--easing), transform var(--duration) var(--easing);
+}
+
+.rx-pill:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.rx-pill:active {
+  transform: translateY(2px);
+}
+
+.rx-pill[aria-pressed='true'],
+.rx-pill[aria-selected='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}

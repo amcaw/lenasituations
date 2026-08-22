@@ -1,0 +1,56 @@
+[
+ {
+  "season": 1,
+  "episode": 1,
+  "icon": "loop",
+  "label": "CECI EST MON NOUVEAU CHALLENGE"
+ },
+ {
+  "season": 3,
+  "episode": null,
+  "icon": "music",
+  "label": "Le générique culte apparaît"
+ },
+ {
+  "season": 3,
+  "episode": null,
+  "icon": "shirt",
+  "label": "T-shirts d'août avec Jennyfer"
+ },
+ {
+  "season": 4,
+  "episode": null,
+  "icon": "money",
+  "label": "Premiers partenariats"
+ },
+ {
+  "season": 6,
+  "episode": null,
+  "icon": "music",
+  "label": "Générique remixé par Julien Grenel"
+ },
+ {
+  "season": 6,
+  "episode": null,
+  "icon": "dress",
+  "label": "Met Gala : première créatrice française invitée"
+ },
+ {
+  "season": 9,
+  "episode": null,
+  "icon": "van",
+  "label": "Road trip aux États-Unis"
+ },
+ {
+  "season": 10,
+  "episode": 1,
+  "icon": "loop",
+  "label": "CECI EST MON DERNIER CHALLENGE"
+ },
+ {
+  "season": 10,
+  "episode": 31,
+  "icon": "arena",
+  "label": "Accor Arena, Paris : le dernier vlog"
+ }
+]
