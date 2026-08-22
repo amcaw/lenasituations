@@ -3,15 +3,15 @@
 
 	let {
 		gone,
-		restricted,
+		approx,
 		missing
-	}: { gone: number; restricted: number; missing: number } = $props();
+	}: { gone: number; approx: number; missing: number } = $props();
 </script>
 
 <details class="legend">
 	<summary>légende</summary>
 	<div class="body">
-		<StatesLegend {gone} {restricted} {missing} />
+		<StatesLegend {gone} {approx} {missing} />
 		<p>
 			L'épaisseur des anneaux dit la durée moyenne des vlogs de la saison. Le trait orange qui
 			traverse les dix anneaux relie le premier épisode de 2017 au premier épisode de 2026.

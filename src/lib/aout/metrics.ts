@@ -100,7 +100,7 @@ export type Buckets = {
 };
 
 export function makeBuckets(metric: Metric, videos: Video[]): Buckets {
-	const usable = videos.filter((v) => v.available);
+	const usable = videos.filter((v) => v.measured);
 	const vals = usable.map(metric.get).filter((x): x is number => x != null);
 	if (metric.buckets === 2) {
 		return {

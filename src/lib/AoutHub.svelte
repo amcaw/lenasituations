@@ -10,6 +10,8 @@
 		open = $bindable(null),
 		metric,
 		total,
+		totalViews = null,
+		totalSecs = null,
 		onclose,
 		onstep
 	}: {
@@ -18,6 +20,8 @@
 		open: Video | null;
 		metric: Metric;
 		total: number;
+		totalViews?: number | null;
+		totalSecs?: number | null;
 		onclose?: () => void;
 		onstep?: (d: { ep: number; season: number }) => void;
 	} = $props();
@@ -95,13 +99,13 @@
 
 	const totals = $derived({
 		vlogs: total,
-		views: seasons.reduce((a, s) => a + s.viewsTotal, 0),
-		hours: seasons.reduce((a, s) => a + s.durationTotal, 0)
+		views: totalViews ?? seasons.reduce((a, s) => a + s.viewsTotal, 0),
+		hours: totalSecs ?? seasons.reduce((a, s) => a + s.durationTotal, 0)
 	});
 
 	const value = $derived.by(() => {
 		if (!hoverVideo) return null;
-		if (!hoverVideo.available) return 'aucune donnée';
+		if (!hoverVideo.measured) return 'aucune donnée';
 		const x = metric.get(hoverVideo);
 		return x == null ? 'non mesuré' : metric.fmt(x);
 	});
@@ -146,7 +150,7 @@
 		{/if}
 	{:else if hoverVideo}
 		<div class="content">
-			{#if hoverVideo.available}
+			{#if hoverVideo.measured}
 				<img class="thumb" src={thumb(hoverVideo.id)} alt="" />
 			{:else}
 				<span class="gone" aria-hidden="true"></span>
@@ -158,21 +162,31 @@
 					{fmtYear(hoverVideo.publishedAt)}
 				{/if}
 			</span>
-			{#if hoverVideo.available}
+			{#if hoverVideo.measured}
 				<strong class="val">{value}</strong>
-				<span class="metric">{metric.label}</span>
+				<span class="metric">{metric.label}{hoverVideo.approx ? ' (arrondi)' : ''}</span>
 				<p class="title">{hoverVideo.title}</p>
-				<span class="hint">cliquer pour regarder</span>
+				<span class="hint">
+					{#if hoverVideo.available}
+						cliquer pour regarder
+					{:else if hoverVideo.status === 'restricted'}
+						soumise à connexion, chiffres relevés dans la liste de la chaîne
+					{:else}
+						chiffres relevés dans la liste de la chaîne
+					{/if}
+				</span>
 			{:else}
 				<strong class="val gone-val">
-					{hoverVideo.status === 'restricted' ? 'soumise à connexion' : 'vidéo indisponible'}
+					{hoverVideo.status === 'restricted' ? 'soumise à connexion' : 'sans chiffres publics'}
 				</strong>
 				<p class="title">
 					{hoverVideo.status === 'restricted'
 						? 'toujours en ligne, regardable en étant connecté, mais ses compteurs restent privés'
 						: hoverVideo.status === 'private'
 							? 'passée en privé par la chaîne'
-							: 'supprimée par la chaîne'}
+							: hoverVideo.status === 'removed'
+								? 'supprimée par la chaîne'
+								: 'plus accessible depuis la France'}
 				</p>
 			{/if}
 		</div>

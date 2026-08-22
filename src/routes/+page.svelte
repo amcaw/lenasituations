@@ -4,6 +4,7 @@
 	import AoutClock from '$lib/AoutClock.svelte';
 	import CircleLegend from '$lib/CircleLegend.svelte';
 	import MetricSwitch from '$lib/MetricSwitch.svelte';
+	import RangeSlider from '$lib/RangeSlider.svelte';
 	import Legend from '$lib/Legend.svelte';
 	import SeasonRail from '$lib/SeasonRail.svelte';
 	import Records from '$lib/Records.svelte';
@@ -22,6 +23,25 @@
 	let hoverSeason = $state<number | null>(null);
 	let open = $state<Video | null>(null);
 
+	const viewBounds = $derived.by(() => {
+		const vs = data.videos.map((v) => v.views).filter((x): x is number => x != null);
+		const step = 50_000;
+		return {
+			min: Math.floor(Math.min(...vs) / step) * step,
+			max: Math.ceil(Math.max(...vs) / step) * step,
+			step
+		};
+	});
+	let viewLo = $state<number | null>(null);
+	let viewHi = $state<number | null>(null);
+	const lo = $derived(viewLo ?? viewBounds.min);
+	const hi = $derived(viewHi ?? viewBounds.max);
+	const filtering = $derived(lo > viewBounds.min || hi < viewBounds.max);
+	const inRange = $derived((v: Video) =>
+		!filtering ? true : v.views != null && v.views >= lo && v.views <= hi
+	);
+	const shown = $derived(data.videos.filter(inRange));
+
 	const metric = $derived(metricBy(metricKey));
 	const buckets = $derived(makeBuckets(metric, data.videos));
 	const byKey = $derived(new Map(data.videos.map((v) => [`${v.season}:${v.episode}`, v])));
@@ -37,8 +57,8 @@
 		episodes: data.videos.length,
 		views: data.seasons.reduce((a, s) => a + s.viewsTotal, 0),
 		secs: data.seasons.reduce((a, s) => a + s.durationTotal, 0),
-		restricted: data.videos.filter((v) => v.status === 'restricted').length,
-		gone: data.videos.filter((v) => v.status === 'private' || v.status === 'removed').length
+		approx: data.videos.filter((v) => v.approx).length,
+		gone: data.videos.filter((v) => !v.measured).length
 	});
 
 	/* Jours sans épisode : uniquement sur les saisons terminées, la saison en
@@ -133,6 +153,16 @@
 				<p class="rx-titre">Colorer le cercle par</p>
 				<MetricSwitch bind:active={metricKey} />
 				<Legend {buckets} label={metric.label} />
+				<RangeSlider
+					min={viewBounds.min}
+					max={viewBounds.max}
+					step={viewBounds.step}
+					bind:lo={() => lo, (v) => (viewLo = v)}
+					bind:hi={() => hi, (v) => (viewHi = v)}
+					label="Filtrer par vues"
+					fmt={fmtViews}
+					count="{shown.length} / {totals.episodes} vlogs"
+				/>
 				<label class="toggle">
 					<input type="checkbox" bind:checked={proportional} />
 					épaisseur des anneaux proportionnelle à la durée
@@ -167,7 +197,7 @@
 
 		<section class="viz">
 			<div class="wrap">
-				<CircleLegend gone={totals.gone} restricted={totals.restricted} missing={missingDays} />
+				<CircleLegend gone={totals.gone} approx={totals.approx} missing={missingDays} />
 				{#if open}
 					<button class="backdrop" aria-label="Fermer la vidéo" onclick={() => (open = null)}></button>
 				{/if}
@@ -178,6 +208,7 @@
 					{buckets}
 					{proportional}
 					{focusSeason}
+					{inRange}
 					bind:hovered
 					onpick={(v) => (open = v)}
 					onreset={reset}
@@ -187,7 +218,9 @@
 						seasons={data.seasons}
 						{hoverVideo}
 						{metric}
-						total={totals.episodes}
+						total={shown.length}
+						totalViews={shown.reduce((a, v) => a + (v.views ?? 0), 0)}
+						totalSecs={shown.reduce((a, v) => a + (v.duration ?? 0), 0)}
 						bind:open
 						onclose={reset}
 						onstep={step}
@@ -218,9 +251,9 @@
 					Source :
 					<a href="https://www.youtube.com/@LenaSituations" target="_blank" rel="noopener">
 						chaîne YouTube de Léna Situations
-					</a>, extraction du 22 août 2026. {totals.episodes} épisodes recensés, dont
-					{totals.restricted} soumis à connexion (toujours en ligne, mais compteurs inaccessibles) et
-					{totals.gone} passés en privé ou supprimés.
+					</a>, extraction du 22 août 2026. {totals.episodes} épisodes recensés. {totals.approx} vidéos
+					dont la fiche est refusée gardent des vues et une durée relevées dans la liste publique de
+					la chaîne, arrondies au millier ; {totals.gone} n'ont aucun chiffre public.
 				</p>
 			</div>
 		</section>
@@ -238,7 +271,9 @@
 
 	<div class="bottom">
 		<section class="block">
-			<p class="rx-titre">Ce que chaque mois d'août fait aux abonnés</p>
+			<p class="rx-titre">
+				Comment les vlogs d'août permettent à Léna d'augmenter son nombre d'abonnés
+			</p>
 			<p class="prose">
 				YouTube ne publie pas l'historique de ses compteurs. Cette courbe est reconstruite à partir
 				de <b>159 copies de la page de la chaîne conservées par l'Internet Archive</b> entre janvier

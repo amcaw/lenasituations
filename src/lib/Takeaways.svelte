@@ -68,7 +68,7 @@
 	const arc = $derived.by(() => {
 		const ratios = closed.map((s) => {
 			const e = videos
-				.filter((v) => v.season === s.season && v.available && v.views)
+				.filter((v) => v.season === s.season && v.measured && v.views)
 				.sort((a, b) => a.episode - b.episode);
 			const mean = e.reduce((a, v) => a + (v.views ?? 0), 0) / e.length;
 			return { first: (e[0].views ?? 0) / mean, last: (e[e.length - 1].views ?? 0) / mean };

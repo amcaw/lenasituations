@@ -27,6 +27,7 @@
 		reverse = false,
 		hovered = $bindable(null),
 		focusSeason = null,
+		inRange = () => true,
 		onpick,
 		onreset
 	}: {
@@ -38,6 +39,7 @@
 		reverse?: boolean;
 		hovered: { season: number; episode: number } | null;
 		focusSeason?: number | null;
+		inRange?: (v: Video) => boolean;
 		onpick?: (v: Video) => void;
 		onreset?: () => void;
 	} = $props();
@@ -53,7 +55,7 @@
 	type State = 'measured' | 'gone' | 'none' | 'future';
 
 	const stateOf = (v: Video | null, season: number): State =>
-		v ? (v.available ? 'measured' : 'gone') : season === 10 ? 'future' : 'none';
+		v ? (v.measured ? 'measured' : 'gone') : season === 10 ? 'future' : 'none';
 
 	const cells = $derived.by(() =>
 		ringList.flatMap((ring) =>
@@ -67,6 +69,7 @@
 					season: ring.season,
 					episode,
 					state,
+					muted: !!v && !inRange(v),
 					fill:
 						state === 'measured' && v && buckets.index(v) != null
 							? bucketVar(
@@ -173,7 +176,7 @@
 				d={c.d}
 				class="cell {c.state}"
 				class:on={hovered?.season === c.season && hovered?.episode === c.episode}
-				class:dim={isDim(c.season)}
+				class:dim={isDim(c.season) || c.muted}
 				fill={c.fill}
 			/>
 		{/each}

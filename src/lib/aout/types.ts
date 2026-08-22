@@ -16,7 +16,9 @@ export type Video = {
 	sponsored: boolean;
 	heat: number[] | null;
 	available: boolean;
-	status: 'ok' | 'restricted' | 'private' | 'removed';
+	measured: boolean;
+	approx: boolean;
+	status: 'ok' | 'restricted' | 'private' | 'removed' | 'unavailable';
 	estimatedDate: boolean;
 };
 
@@ -27,6 +29,7 @@ export type Season = {
 	nMeasured: number;
 	nUnavailable: number;
 	nRestricted: number;
+	nApprox: number;
 	viewsTotal: number;
 	viewsMean: number;
 	viewsMedian: number;

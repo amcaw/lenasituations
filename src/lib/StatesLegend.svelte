@@ -1,14 +1,14 @@
 <script lang="ts">
 	let {
 		gone,
-		restricted,
+		approx,
 		missing
-	}: { gone: number; restricted: number; missing: number } = $props();
+	}: { gone: number; approx: number; missing: number } = $props();
 </script>
 
 <ul class="states">
-	<li><span class="sw measured"></span> épisode mesuré</li>
-	<li><span class="sw gone"></span> sans données publiques ({gone + restricted})</li>
+	<li><span class="sw measured"></span> épisode mesuré ({approx} arrondis)</li>
+	<li><span class="sw gone"></span> sans chiffres publics ({gone})</li>
 	<li><span class="sw none"></span> aucun épisode ce jour ({missing})</li>
 	<li><span class="sw future"></span> reste à publier</li>
 	<li><span class="sw bonus"></span> bonus publié en septembre</li>
