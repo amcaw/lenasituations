@@ -30,6 +30,13 @@
 
 	const CARDS = $derived([
 		{
+			cover: true,
+			kicker: `${data.videos.length} épisodes passés au crible`,
+			title: "J'avoue : j'adore les vlogs d'août de Léna Situations",
+			lede: 'Alors je les ai tous mesurés. Vues, likes, commentaires, durée, heure de publication. Voici ce que dix ans de chiffres racontent.',
+			foot: 'Une analyse de données'
+		},
+		{
 			kicker: 'Ce que le rituel fabrique',
 			title: "Un mois d'août vaut une année d'abonnés",
 			lede: `Reconstruit depuis 159 copies archivées de la page de la chaîne. Chaque bande orange est une saison de vlogs : en moyenne <b>+${Math.round(august / 1000)} 000 abonnés</b> sur le mois, plusieurs fois le rythme du reste de l'année.`,
@@ -51,14 +58,21 @@
 			kicker: 'Ce que dix ans racontent',
 			title: 'Dix enseignements',
 			lede: '',
-			foot: '268 épisodes analysés, de 2017 à 2026'
+			foot: `${data.videos.length} épisodes analysés, de 2017 à 2026`
+		},
+		{
+			cover: true,
+			kicker: 'À explorer',
+			title: 'Cliquez une case, le vlog se lance',
+			lede: "Les 268 épisodes dans un seul cercle : un anneau par saison, un secteur par jour du mois. Sept lectures au choix, un filtre par audience, et la vidéo qui s'ouvre au centre comme un objectif d'appareil photo.",
+			foot: 'amcaw.github.io/lenasituations'
 		}
 	]);
 
-	const card = $derived(CARDS[Math.min(4, Math.max(1, n)) - 1]);
+	const card = $derived(CARDS[Math.min(6, Math.max(1, n)) - 1]);
 </script>
 
-<div class="carte" class:dense={n === 4}>
+<div class="carte" class:dense={n === 5} class:cover={card.cover}>
 	<header>
 		<p class="kicker">{card.kicker}</p>
 		<h1>{card.title}</h1>
@@ -66,11 +80,13 @@
 	</header>
 
 	<div class="stage">
-		{#if n === 1}
-			<div class="wide"><SubsChart subs={data.subs} /></div>
+		{#if card.cover}
+			<div class="mark" aria-hidden="true"></div>
 		{:else if n === 2}
-			<div class="clock"><AoutClock videos={data.videos} seasons={data.seasons} /></div>
+			<div class="wide"><SubsChart subs={data.subs} /></div>
 		{:else if n === 3}
+			<div class="clock"><AoutClock videos={data.videos} seasons={data.seasons} /></div>
+		{:else if n === 4}
 			<Records videos={data.videos} limit={10} />
 		{:else}
 			<Takeaways videos={data.videos} seasons={data.seasons} subs={data.subs} />
@@ -177,6 +193,33 @@
 	}
 	.dense h1 {
 		font-size: 5.2vw;
+	}
+
+	.cover h1 {
+		font-size: 7.8vw;
+	}
+	.cover .lede {
+		font-size: 2.9vw;
+	}
+	/* Une roue des six teintes de l'échelle : elle rappelle la viz sans la
+	   redire, et donne à la couverture de quoi tenir la page. */
+	.mark {
+		width: 46vw;
+		aspect-ratio: 1;
+		margin: 0 auto;
+		border-radius: 50%;
+		background: conic-gradient(
+			from -90deg,
+			var(--sun-0),
+			var(--sun-1),
+			var(--sun-2),
+			var(--sun-3),
+			var(--sun-4),
+			var(--sun-5),
+			var(--sun-0)
+		);
+		-webkit-mask: radial-gradient(circle, transparent 53%, #000 53.5%);
+		mask: radial-gradient(circle, transparent 53%, #000 53.5%);
 	}
 
 	footer {
