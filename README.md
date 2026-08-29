@@ -1,7 +1,7 @@
 # Léna Situations — dix ans de vlogs d'août
 
 Visualisation interactive des dix saisons de « vlogs d'août » de Léna Situations
-(2017-2026) : 277 épisodes, un anneau par saison, un secteur par jour du mois.
+(2017-2026) : 276 épisodes, un anneau par saison, un secteur par jour du mois.
 
 **En ligne : https://amcaw.github.io/lenasituations**
 
